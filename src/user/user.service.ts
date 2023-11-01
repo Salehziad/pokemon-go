@@ -126,11 +126,17 @@ export class UserService implements OnModuleInit {
           where: { id: userId },
           data: { password: hashedPassword },
         });
-      }
+    }
 
     async delete(userId: string): Promise<void> {
         await this.prismaService.user.delete({
             where: { id: userId },
+        });
+    }
+
+    async findOneByEmail(email: string): Promise<User | null> {
+        return this.prismaService.user.findUnique({
+            where: { email },
         });
     }
 
