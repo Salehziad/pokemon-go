@@ -1,19 +1,22 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create.user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { AuthJwtGuard } from 'src/auth/auth.guard';
 
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) { }
 
     @Get()
+    @UseGuards(AuthJwtGuard)
     findAll() {
         return this.userService.findAll()
     }
 
     @Get(':id')
+    @UseGuards(AuthJwtGuard)
     findOne(@Param('id') userId: string) {
       const user = this.userService.findOne(userId);
       return user;
@@ -25,18 +28,21 @@ export class UserController {
     }
 
     @Put(':id')
+    @UseGuards(AuthJwtGuard)
     async updateUser(@Param('id') userId: string, @Body() updateUserDto: UpdateUserDto) {
       const updatedUser = await this.userService.updateUser(userId, updateUserDto);
       return updatedUser;
     }
 
     @Patch(':id/password')
+    @UseGuards(AuthJwtGuard)
     async updatePassword(@Param('id') userId: string, @Body() updatePasswordDto: UpdatePasswordDto) {
       await this.userService.updatePassword(userId, updatePasswordDto);
       return { message: 'Password updated successfully' };
     }
 
     @Delete(':id')
+    @UseGuards(AuthJwtGuard)
     delete(@Param('id') userId: string) {
       this.userService.delete(userId);
       return { message: 'User deleted successfully' };
