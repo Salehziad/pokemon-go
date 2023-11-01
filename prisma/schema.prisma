@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {  
+    provider = "mongodb"
+    url = env("DATABASE_URL")
+} 
+generator client {  
+    provider = "prisma-client-js"
+}
+// schema.prisma
+
+model User {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId  
+  email    String  @unique
+  name     String
+  createdAt DateTime
+  updatedAt DateTime
+  role     Role    // Define the 'role' field with the enum type 'Role'
+}
+
+model pokemon {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId  
+  name          String
+  pokedexNumber Int
+  imgName       String
+  generation    Int
+  evolutionStage  String?
+  evolved       Boolean?
+  familyID      Int?
+  crossGen      Boolean
+  type1         String
+  type2         String?
+  weather1      String
+  weather2      String?
+  statTotal     Int?
+  ATK           Int
+  DEF           Int
+  STA           Int
+  legendary     Boolean
+  aquireable    Boolean
+  spawns        Boolean?
+  regional      Boolean
+  raidable      Int?
+  hatchable     Int?
+  shiny         Boolean?
+  nest          Boolean?
+  new           Boolean?
+  notGettable   Boolean?
+  futureEvolve  Boolean
+  cpAt40        Int
+  cpAt39        Int
+}
+
+
+enum Role {
+  READ
+  WRITE
+  ADMIN
+}
+
