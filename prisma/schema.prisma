@@ -17,7 +17,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   role     Role   
-  password String
+  password String  
 }
 
 model pokemon {
