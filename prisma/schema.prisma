@@ -55,8 +55,7 @@ model pokemon {
 
 
 enum Role {
-  READ
-  WRITE
+  Member
   ADMIN
 }
 

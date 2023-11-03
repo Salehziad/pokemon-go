@@ -21,7 +21,7 @@ export class UpdateUserDto {
   readonly name?: string;
 
   @ApiProperty({
-    example: UserRole.READ,
+    example: UserRole.Member,
     enum: UserRole,
     description: 'The new role of the user (READ, WRITE, or ADMIN) (optional)',
   })
