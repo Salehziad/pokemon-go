@@ -21,15 +21,6 @@ export class UpdateUserDto {
   readonly name?: string;
 
   @ApiProperty({
-    example: UserRole.Member,
-    enum: UserRole,
-    description: 'The new role of the user (READ, WRITE, or ADMIN) (optional)',
-  })
-  @IsEnum(UserRole)
-  @IsOptional()
-  readonly role?: UserRole;
-
-  @ApiProperty({
     example: 'OldPassword123',
     description: 'The old password (required when updating the password)',
   })
