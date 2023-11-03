@@ -3,14 +3,14 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class SignInDto {
   @ApiProperty({
-    example: 'user@example.com',
+    example: 'admin@pokemon.go',
     description: 'User email',
   })
   @IsEmail()
   email: string;
 
   @ApiProperty({
-    example: 'YourPassword123',
+    example: 'admin-pokemongo',
     description: 'User password',
   })
   @IsString()

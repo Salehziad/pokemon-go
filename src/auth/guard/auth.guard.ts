@@ -5,13 +5,11 @@ import {
     UnauthorizedException,
   } from '@nestjs/common';
   import { JwtService } from '@nestjs/jwt';
-import { RequestService } from 'src/request.service';
   
   @Injectable()
   export class AuthJwtGuard implements CanActivate {
     constructor(
       private jwtService: JwtService,
-      private readonly RequestService: RequestService,
     ) {}
   
     async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -21,7 +19,9 @@ import { RequestService } from 'src/request.service';
         const decoded = this.jwtService.verify(token, {
           secret: 'your-access-token-secret', // Provide your access token secret key here
         });
-        request.user = decoded; // Attach the decoded user to the request object
+        
+        request.user = decoded.userData; // Attach the decoded user to the request object
+        // console.log("ssss", request.user);
         return true;
       } catch (error) {
         if (error.name === 'TokenExpiredError') {

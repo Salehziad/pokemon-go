@@ -31,7 +31,7 @@ export class UserService implements OnModuleInit {
     }
 
     async findAll() {
-        const result = await this.prismaService.user.findMany()
+        const result = await this.prismaService.user.findMany()        
         return result;
     }
 
