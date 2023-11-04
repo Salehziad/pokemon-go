@@ -77,10 +77,13 @@ To run the project, follow these steps:
    docker-compose up
 1. After the containers are up and running, you can access Swagger documentation at http://localhost:8080/pokemon-api-docs.
 
-To use the APIs, you need to log in with the following details:
-Email: 'admin@pokemon.go'
-Name: 'admin'
-In Swagger, click on the "Authorize" button and fill in the "Bearer" field with the access token obtained after logging in.
+To access our APIs, please follow these steps to log in with the provided credentials:
+
+- **Email**: 'admin@pokemon.go'
+- **Password**: 'admin-pokemongo'
+
+After successfully logging in, navigate to the Swagger interface, where you will find an "Authorize" button. Click on it and fill in the "Bearer" field with the access token you obtain upon logging in.
+
 
 ## Running Tests
 
