@@ -40,10 +40,10 @@ describe('UserController', () => {
       id: '1',
       email: createUserDto.email,
       name: createUserDto.name,
-      createdAt: new Date(), // Set actual date values
+      createdAt: new Date(), 
       updatedAt: new Date(),
-      role: "ADMIN", // Make 'role' optional or omit it
-      password: 'hashed_password', // Set an example hashed password
+      role: "ADMIN", 
+      password: 'hashed_password',
     };
   
     jest.spyOn(userService, 'create').mockResolvedValue(createdUser);
@@ -62,10 +62,10 @@ describe('UserController', () => {
       id: userId,
       email: 'test@example.com',
       name: 'Updated User',
-      createdAt: new Date(), // Set actual date values
+      createdAt: new Date(), 
       updatedAt: new Date(),
-      role: 'ADMIN', // Set the role as required by the type
-      password: 'hashed_password', // Set an example hashed password
+      role: 'ADMIN', 
+      password: 'hashed_password', 
     };
   
     jest.spyOn(userService, 'updateUser').mockResolvedValue(updatedUser);
@@ -75,9 +75,8 @@ describe('UserController', () => {
   });
 
   it('should update the user role', async () => {
-    // Arrange
     const userId = '1';
-    const updateRoleDto: UpdateRoleDto = { role:UserRole.MEMBER }; // Specify the new role
+    const updateRoleDto: UpdateRoleDto = { role:UserRole.MEMBER }; 
 
     const updatedUser: User = {
       id: userId,
@@ -85,18 +84,15 @@ describe('UserController', () => {
       name: 'Test User',
       createdAt: new Date(),
       updatedAt: new Date(),
-      role: UserRole.MEMBER, // Set the expected updated role
+      role: UserRole.MEMBER, 
       password: 'hashed_password',
     };
 
-    // Mock the updateUserRole method in the userService to return the updatedUser
     jest.spyOn(userService, 'updateUserRole').mockResolvedValue(updatedUser);
 
-    // Act
     const result = await controller.updateUserRole(userId, updateRoleDto);
 
-    // Assert
-    expect(result).toEqual(updatedUser); // Ensure that the result matches the updatedUser
+    expect(result).toEqual(updatedUser); 
   });
 
   it('should update a user password', async () => {

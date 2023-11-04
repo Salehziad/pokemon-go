@@ -55,7 +55,6 @@ describe('UserService', () => {
   });
 
   it('should find a user by ID', async () => {
-    // Mock the PrismaService to return a user
     const userId = '1';
     const user: User = {
       id: userId,
@@ -74,7 +73,6 @@ describe('UserService', () => {
   });
 
   it('should create a user', async () => {
-    // Mock the PrismaService to create a user
     const createUserDto: CreateUserDto = {
       email: 'newuser@example.com',
       name: 'New User',
@@ -88,7 +86,7 @@ describe('UserService', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       role: UserRole.MEMBER,
-      password: 'hashed_password', // Simulate hashing
+      password: 'hashed_password',
     };
 
     jest.spyOn(prismaService.user, 'create').mockResolvedValue(createdUser);
@@ -98,7 +96,6 @@ describe('UserService', () => {
   });
 
   it('should update a user', async () => {
-    // Mock the PrismaService to update a user
     const userId = '1';
     const updateUserDto: UpdateUserDto = {
       name: 'Updated User',
@@ -111,7 +108,7 @@ describe('UserService', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       role: UserRole.MEMBER,
-      password: 'hashed_password', // Simulate hashing
+      password: 'hashed_password',
     };
 
     jest.spyOn(service, 'findOne').mockResolvedValue(updatedUser);
@@ -122,7 +119,6 @@ describe('UserService', () => {
   });
 
   it('should update a user password', async () => {
-    // Mock the PrismaService to update a user's password
     const userId = '1';
     const updatePasswordDto: UpdatePasswordDto = {
       oldPassword: 'incorrect_password', // Provide an incorrect old password
@@ -136,7 +132,7 @@ describe('UserService', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       role: UserRole.MEMBER,
-      password: 'hashed_password', // Simulate hashing
+      password: 'hashed_password',
     };
 
     jest.spyOn(service, 'findOne').mockResolvedValue(user);
@@ -144,10 +140,9 @@ describe('UserService', () => {
     await expect(service.updatePassword(userId, updatePasswordDto)).rejects.toThrowError(
       'Old password is incorrect'
     );
-});
+  });
 
   it('should update a user role', async () => {
-    // Mock the PrismaService to update a user's role
     const userId = '1';
     const updateRoleDto: UpdateRoleDto = { role: UserRole.ADMIN };
 
@@ -158,7 +153,7 @@ describe('UserService', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       role: UserRole.ADMIN,
-      password: 'hashed_password', // Simulate hashing
+      password: 'hashed_password',
     };
 
     jest.spyOn(service, 'findOne').mockResolvedValue(user);
@@ -169,7 +164,6 @@ describe('UserService', () => {
   });
 
   it('should find a user by email', async () => {
-    // Mock the PrismaService to find a user by email
     const userEmail = 'user1@example.com';
     const user: User = {
       id: '1',
@@ -178,7 +172,7 @@ describe('UserService', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       role: UserRole.MEMBER,
-      password: 'hashed_password', // Simulate hashing
+      password: 'hashed_password',
     };
 
     jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(user);
