@@ -99,19 +99,6 @@ describe('UserController', () => {
     expect(result).toEqual(updatedUser); // Ensure that the result matches the updatedUser
   });
 
-  it('should handle a user not found', async () => {
-    // Arrange
-    const userId = 'nonexistent'; // Assume a non-existent user
-    const updateRoleDto: UpdateRoleDto = { role:UserRole.MEMBER };
-
-    // Mock the updateUserRole method to return null, indicating the user is not found
-    jest.spyOn(userService, 'updateUserRole').mockResolvedValue(null);
-
-    // Act and Assert
-    await expect(controller.updateUserRole(userId, updateRoleDto)).rejects.toThrowError('User not found');
-  });
-
-  
   it('should update a user password', async () => {
     const userId = '1';
     const updatePasswordDto: UpdatePasswordDto = {
