@@ -1,4 +1,4 @@
-FROM node:16.19.1-alpine3.16
+FROM node:20.8.0
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
@@ -13,9 +13,7 @@ COPY . .
 # Build the Nest.js application
 RUN npm run build
 
-RUN npx prisma generate
-
 # Expose the port the app runs on
 EXPOSE 8080
 
-CMD [ "npm", "start" ]
+CMD [ "npm","run", "start:dev" ]

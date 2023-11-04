@@ -9,25 +9,10 @@ import { UserService } from '../user/user.service';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly prismaService: PrismaService,
     private readonly userService: UserService,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<User | null> {
-    const user = await this.prismaService.user.findUnique({
-      where: { email },
-    });
-
-    if (!user) {
-      return null;
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    return isPasswordValid ? user : null;
-  }
-
-  async signin(signInDto: SignInDto, response): Promise<{ accessToken: string }> {
+  async signin(signInDto: SignInDto, request): Promise<{ accessToken: string }> {
     const { email, password } = signInDto;
     
     try {
@@ -41,13 +26,15 @@ export class AuthService {
 
       const { accessToken, refreshToken } = this.generateTokens(user);
       
-      response.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        path: '/',
-      });
+      request.res.setHeader(
+        'Set-Cookie',
+        `refreshToken=${refreshToken}; HttpOnly; Path=/;`,
+      );
 
       return { accessToken };
     } catch (error) {
+      console.log(error);
+      
       throw new UnauthorizedException('Authentication failed. Please try again.');
     }
   }
