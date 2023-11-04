@@ -1,73 +1,84 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Pokemon Go Project Documentation
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Overview
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Welcome to the official documentation of the Pokemon Go project. This project is a robust CRUD (Create, Read, Update, Delete) application that manages a Pokemon database, integrated with user authentication. Developed using NestJS, this documentation provides an in-depth understanding of the project structure, technologies used, and how to run the application.
 
-## Description
+## Technologies Used
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This section provides an overview of the technologies used in the project:
 
-## Installation
+- **Node.js**: A runtime environment for executing JavaScript on the server.
+- **NestJS**: A powerful and extensible framework for building server-side applications.
+- **MongoDB**: A NoSQL database used for storing Pokemon and user data.
+- **Prisma**: An ORM (Object-Relational Mapping) tool for efficient database access.
+- **@nestjs/common**: A core module of NestJS for building controllers, modules, and providers.
+- **@nestjs/jwt**: A module for handling JSON Web Tokens (JWT) in NestJS.
+- **@nestjs/platform-express**: Express integration for NestJS.
+- **@nestjs/swagger**: A module for automatically generating API documentation using Swagger.
+- **bcrypt**: A library for hashing and verifying passwords securely.
+- **class-transformer**: A library for transforming class objects.
+- **class-validator**: A library for data validation.
+- **dotenv**: A module for loading environment variables from a .env file.
+- **xlsx**: A library for parsing Excel files.
 
-```bash
-$ npm install
-```
+## Database Information
 
-## Running the app
+The project uses MongoDB as the database for storing Pokemon and user data. MongoDB is a NoSQL database that provides flexibility for managing unstructured data.
 
-```bash
-# development
-$ npm run start
+## Project Structure
 
-# watch mode
-$ npm run start:dev
+The project is organized into the following key components:
 
-# production mode
-$ npm run start:prod
-```
+### Controllers
 
-## Test
+#### AuthController
+- Responsible for authentication and user-related operations.
+- Endpoints:
+  - `GET /auth`: Retrieves user data.
+  - `POST /auth/signup`: Registers a new user.
+  - `PUT /auth/:id`: Updates user information.
+  - `PATCH /auth/:id/password`: Updates user password.
+  - `PATCH /auth/:id/`: Updates user role.
+  - `DELETE /auth/:id`: Deletes a user (Admin role required).
 
-```bash
-# unit tests
-$ npm run test
+#### UserController
+- Manages user-related operations and is protected with authentication guards.
+- Endpoints:
+  - `GET /user`: Retrieves all users.
+  - `GET /user/:id`: Retrieves a user by ID.
+  - `POST /user/signup`: Registers a new user.
+  - `PUT /user/:id`: Updates user information.
+  - `PATCH /user/:id/password`: Updates user password.
+  - `PATCH /user/:id/`: Updates user role.
+  - `DELETE /user/:id`: Deletes a user (Admin role required).
 
-# e2e tests
-$ npm run test:e2e
+#### PokemonController
+- Handles Pokemon-related operations and is also protected with authentication guards.
+- Endpoints:
+  - `GET /pokemon/insert`: Imports Pokemon data from an Excel file.
+  - `GET /pokemon`: Retrieves Pokemon data with optional filtering.
+  - `GET /pokemon/:id`: Retrieves a Pokemon by ID.
+  - `POST /pokemon`: Creates a new Pokemon.
+  - `PUT /pokemon/:id`: Updates Pokemon information.
+  - `DELETE /pokemon/:id`: Deletes a Pokemon (Admin role required).
 
-# test coverage
-$ npm run test:cov
-```
+## Running Tests
 
-## Support
+To run tests for the project, follow these steps:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+1. Make sure you have Node.js and npm installed on your system.
 
-## Stay in touch
+2. Navigate to the project directory using the terminal.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+3. Run the following command to install the project's dependencies:
 
-## License
+   ```bash
+   npm install
+   npm run test
 
-Nest is [MIT licensed](LICENSE).
+## Test Results
+
+Below is an example of test results:
+
+![Test Results](testResult.png)
