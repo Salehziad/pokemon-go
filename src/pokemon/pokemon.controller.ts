@@ -1,11 +1,14 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PokemonService } from './pokemon.service';
 import { PokemonFilterDto } from './dto/get-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { pokemon } from '@prisma/client';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
+import { AuthJwtGuard } from 'src/auth/guard/auth.guard';
+import { RoleGuard } from 'src/auth/guard/role.guard';
 
 @Controller('pokemon')
+@UseGuards(AuthJwtGuard)
 export class PokemonController {
   constructor(private readonly pokemonService: PokemonService) { }
 
@@ -44,6 +47,7 @@ export class PokemonController {
   }
 
   @Delete(':id')
+  @UseGuards(new RoleGuard({ role: 'ADMIN' }))
   async deletePokemon(@Param('id') id: string): Promise<void> {
     await this.pokemonService.delete(id);
   }
