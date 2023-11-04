@@ -54,6 +54,4 @@ export class PokemonController {
     await this.pokemonService.delete(id);
   }
 
-
-
 }
