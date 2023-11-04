@@ -5,9 +5,11 @@ import { PrismaService } from '../prisma.service';
 
 import { JwtService } from '@nestjs/jwt';
 import { RequestService } from '../request.service';
+import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
-  providers: [UserService,PrismaService,JwtService,RequestService],
-  controllers: [UserController]
+  providers: [UserService],
+  controllers: [UserController],
+  imports:[SharedModule]
 })
 export class UserModule {}

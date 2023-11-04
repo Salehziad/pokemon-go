@@ -5,9 +5,10 @@ import { PokemonModule } from './pokemon/pokemon.module';
 import { ErrorHandlerMiddleware } from './middleware/error-handler.middleware';
 import { RequestLoggerMiddleware } from './middleware/request-logger.middleware';
 import { LoggerService } from './shared/logger.service';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
-  imports: [UserModule, AuthModule, PokemonModule],
+  imports: [UserModule, AuthModule, PokemonModule, SharedModule],
   providers: [
     LoggerService
   ],
