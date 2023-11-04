@@ -47,7 +47,7 @@ export class PokemonService {
     const pokemon = await this.findOne(id)
 
     if (!pokemon) {
-      throw new NotFoundException(`Pokemon with ID ${id} not found`);
+      throw new Error(`Pokemon with ID ${id} not found`);
     }
 
     await this.prisma.pokemon.delete({

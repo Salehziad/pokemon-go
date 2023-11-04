@@ -3,11 +3,13 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as dotenv from 'dotenv';
+import { ErrorHandlerMiddleware } from './middleware/error-handler.middleware';
 
 // Load environment variables from .env file
 dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // app.useGlobalFilters(new ErrorHandlerMiddleware());
 
   const config = new DocumentBuilder()
     .setTitle('Pokémon API')
