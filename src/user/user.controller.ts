@@ -6,11 +6,12 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { AuthJwtGuard } from '../auth/guard/auth.guard';
 import { RoleGuard } from '../auth/guard/role.guard';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import { promises } from 'dns';
 import { User } from '@prisma/client';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('user')
-// @UseGuards(AuthJwtGuard)
+@ApiBearerAuth()
+@UseGuards(AuthJwtGuard)
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
