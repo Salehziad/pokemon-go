@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '../prisma.service';
+
 import { SignInDto } from './dto/sign-in.dto';
 import { UserService } from 'src/user/user.service';
 import { sign } from 'jsonwebtoken';

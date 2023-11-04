@@ -1,6 +1,6 @@
 // userService.ts
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '../prisma.service'; 
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
@@ -18,7 +18,7 @@ export class UserService implements OnModuleInit {
 
         // If no admin user exists, create one
         if (!adminUserExists) {
-            const adminUserDto: CreateUserDto = {
+            const adminUserDto = {
                 email: 'admin@pokemon.go',
                 name: 'admin',
                 role: UserRole.ADMIN,
