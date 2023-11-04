@@ -3,8 +3,8 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
-import { AuthJwtGuard } from 'src/auth/guard/auth.guard';
-import { RoleGuard } from 'src/auth/guard/role.guard';
+import { AuthJwtGuard } from '../auth/guard/auth.guard';
+import { RoleGuard } from '../auth/guard/role.guard';
 
 @Controller('user')
 @UseGuards(AuthJwtGuard)

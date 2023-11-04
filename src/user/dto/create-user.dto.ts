@@ -31,7 +31,7 @@ export class CreateUserDto {
     description: 'The role of the user (READ, WRITE, or ADMIN)',
   })
   @IsEnum(UserRole)
-  readonly role: UserRole;
+  readonly role?: UserRole;
 
   @ApiProperty({
     example: 'Password123', 

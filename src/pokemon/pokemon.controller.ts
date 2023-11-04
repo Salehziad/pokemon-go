@@ -4,7 +4,7 @@ import { PokemonFilterDto } from './dto/get-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { pokemon } from '@prisma/client';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
-import { AuthJwtGuard } from 'src/auth/guard/auth.guard';
+import { AuthJwtGuard } from '../auth/guard/auth.guard';
 import { RoleGuard } from 'src/auth/guard/role.guard';
 
 @Controller('pokemon')

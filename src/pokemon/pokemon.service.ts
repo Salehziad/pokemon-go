@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, OnApplicationBootstrap } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '../prisma.service';
+
 import * as XLSX from 'xlsx';
 import * as fs from 'fs';
 import { pokemon } from '@prisma/client';
