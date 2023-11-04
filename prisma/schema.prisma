@@ -56,5 +56,6 @@ model pokemon {
 
 enum Role {
   ADMIN
+  MEMBER
 }
 

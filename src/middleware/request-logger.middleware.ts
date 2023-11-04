@@ -1,19 +1,31 @@
-import { Injectable, NestMiddleware, Logger } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
+import { LoggerService } from 'src/shared/logger.service';
+
 
 @Injectable()
 export class RequestLoggerMiddleware implements NestMiddleware {
-  private readonly logger = new Logger();
+  constructor(private readonly logger: LoggerService) { }
 
   use(req: Request, res: Response, next: NextFunction) {
-    const start = Date.now();
-    res.on('finish', () => {
-      const end = Date.now();
-      const elapsed = end - start;
-      this.logger.log(
-        `Request to ${req.method} ${req.url} completed in ${elapsed}ms`
-      );
-    });
+    const { method, originalUrl: url, ip } = req;
+
+    // Record the start time of the request processing
+    const startTime = new Date().getTime();
+
+    // Move to the next middleware in the pipeline
     next();
+
+    // After the response is sent, calculate the time taken and log it along with the status code
+    res.on('finish', () => {
+      const endTime = new Date().getTime();
+      const duration = endTime - startTime;
+      const statusCode = res.statusCode; // Get the HTTP status code
+
+      if (statusCode >= 200 && statusCode < 400) {
+        // HTTP status code indicates success
+        this.logger.info(`Request to ${method} ${url} took ${duration} ms - Status: ${statusCode}`);
+      }
+    });
   }
 }
