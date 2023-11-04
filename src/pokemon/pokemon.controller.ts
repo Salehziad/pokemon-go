@@ -15,6 +15,7 @@ export class PokemonController {
   constructor(private readonly pokemonService: PokemonService) { }
 
   @Get('insert')
+  @UseGuards(new RoleGuard({ role: 'ADMIN' }))
   upload() {
     return this.pokemonService.insertDateFromExcel('./Pokemon Go.xlsx');
   }
