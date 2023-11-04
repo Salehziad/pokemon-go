@@ -8,6 +8,7 @@ import { LoggerService } from './shared/logger.service';
 
 // Load environment variables from .env file
 dotenv.config();
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = app.get(LoggerService);
@@ -26,6 +27,6 @@ async function bootstrap() {
 
   // Enable validation globally
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  await app.listen(3000);
+  await app.listen(8080);
 }
 bootstrap();
