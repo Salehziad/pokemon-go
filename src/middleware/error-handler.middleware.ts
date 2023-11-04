@@ -7,15 +7,10 @@ export class ErrorHandlerMiddleware implements NestMiddleware {
   constructor(private readonly logger: LoggerService) {} // Inject the logger service
 
   use(req: Request, res: Response, next: NextFunction) {
-    // Your middleware logic
-    // You can handle errors or perform other actions here
-
-    // If you want to handle errors, you can add code like this:
     try {
-      // Execute the next middleware or route handler
+      // Execute the next middleware
       next();
     } catch (error) {
-      // Handle the error
       const status =
         error instanceof HttpException
           ? error.getStatus()
@@ -26,7 +21,6 @@ export class ErrorHandlerMiddleware implements NestMiddleware {
       // Log the error using the logger service
       this.logger.error(message, error.stack);
 
-      // Send a response with the error information
       res.status(status).json({
         statusCode: status,
         timestamp: new Date().toISOString(),
