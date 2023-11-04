@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma.service';
 
 import { SignInDto } from './dto/sign-in.dto';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { sign } from 'jsonwebtoken';
 import { User } from '@prisma/client';
 

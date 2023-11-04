@@ -4,7 +4,7 @@ import { UserController } from './user.controller';
 import { PrismaService } from '../prisma.service';
 
 import { JwtService } from '@nestjs/jwt';
-import { RequestService } from 'src/request.service';
+import { RequestService } from '../request.service';
 
 @Module({
   providers: [UserService,PrismaService,JwtService,RequestService],
