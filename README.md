@@ -63,6 +63,25 @@ The project is organized into the following key components:
   - `PUT /pokemon/:id`: Updates Pokemon information.
   - `DELETE /pokemon/:id`: Deletes a Pokemon (Admin role required).
 
+## Running the Project
+
+To run the project, follow these steps:
+
+1. Make sure you have Docker and Docker Compose installed on your system.
+
+2. Open a terminal and navigate to the project directory where your `docker-compose.yml` is located.
+
+3. Run the following command to start the project using Docker Compose:
+
+   ```bash
+   docker-compose up
+1. After the containers are up and running, you can access Swagger documentation at http://localhost:8080/pokemon-api-docs.
+
+To use the APIs, you need to log in with the following details:
+Email: 'admin@pokemon.go'
+Name: 'admin'
+In Swagger, click on the "Authorize" button and fill in the "Bearer" field with the access token obtained after logging in.
+
 ## Running Tests
 
 To run tests for the project, follow these steps:
