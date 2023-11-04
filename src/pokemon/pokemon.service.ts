@@ -1,7 +1,9 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { Injectable, NotFoundException, OnApplicationBootstrap } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import * as XLSX from 'xlsx';
 import * as fs from 'fs';
+import { pokemon } from '@prisma/client';
+import { CreatePokemonDto } from './dto/create-pokemon.dto';
 
 @Injectable()
 export class PokemonService {
@@ -21,8 +23,41 @@ export class PokemonService {
     return pokemons;
   }
 
+  async findOne(id: string) {
+    const result = await this.prisma.pokemon.findUnique({ where: { id } })
+    return result;
+  }
+
+  async create(createPokemonDto: CreatePokemonDto): Promise<pokemon> {
+    return this.prisma.pokemon.create({
+      data: createPokemonDto,
+    });
+  }
+
+  async update(id: string, updateData: Partial<pokemon>): Promise<pokemon> {
+    const updatedPokemon = await this.prisma.pokemon.update({
+      where: { id },
+      data: updateData,
+    });
+
+    return updatedPokemon;
+  }
+
+  async delete(id: string): Promise<void> {
+    const pokemon = await this.findOne(id)
+
+    if (!pokemon) {
+      throw new NotFoundException(`Pokemon with ID ${id} not found`);
+    }
+
+    await this.prisma.pokemon.delete({
+      where: { id },
+    });
+  }
+
+
   // read excel file and return json data
-  async insertDateFromExcel(pathToFile:string) {
+  async insertDateFromExcel(pathToFile: string) {
     try {
       // Read the file contents from the provided file path
       const fileContents = fs.readFileSync(pathToFile);
@@ -37,7 +72,7 @@ export class PokemonService {
       // loop through the data and create a new object for each row
       const data = xlData.map((row) => ({
         name: row['Name'],
-        pokedexNumber:row['Pokedex Number'],
+        pokedexNumber: row['Pokedex Number'],
         imgName: row['Img name'].toString(),
         generation: row['Generation'],
         evolutionStage: row['Evolution Stage']
@@ -82,5 +117,5 @@ export class PokemonService {
       throw error;
     }
   }
-  
+
 }
