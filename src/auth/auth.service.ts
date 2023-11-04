@@ -1,22 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../prisma.service';
-
-import { SignInDto } from './dto/sign-in.dto';
-import { UserService } from '../user/user.service';
 import { sign } from 'jsonwebtoken';
 import { User } from '@prisma/client';
+import { PrismaService } from '../prisma.service';
+import { SignInDto } from './dto/sign-in.dto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
-    // private readonly jwtService: JwtService,
     private readonly userService: UserService,
   ) {}
 
-  async validateUser(email: string, password: string) {
+  async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.prismaService.user.findUnique({
       where: { email },
     });
@@ -30,45 +27,44 @@ export class AuthService {
     return isPasswordValid ? user : null;
   }
 
-  async signin(signInDto: SignInDto, request) {
+  async signin(signInDto: SignInDto, response): Promise<{ accessToken: string }> {
     const { email, password } = signInDto;
-    let user = await this.userService.findOneByEmail(email);
-    console.log(user);
     
-    const isMatch = await this.comparePassword({
-      password,
-      hash: user.password,
-    });
+    try {
+      const user = await this.userService.findOneByEmail(email);
 
-    if (!isMatch)
-      throw new Error(`Wrong password please try again`,);
+      const isMatch = await this.comparePassword(password, user.password);
 
-    const { accessToken, refreshToken } = this.generateTokens(user);
+      if (!isMatch) {
+        throw new UnauthorizedException('Wrong password. Please try again.');
+      }
 
-    request.res.setHeader(
-      'Set-Cookie',
-      `refreshToken=${refreshToken}; HttpOnly; Path=/;`,
-    );
+      const { accessToken, refreshToken } = this.generateTokens(user);
+      
+      response.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        path: '/',
+      });
 
-    return { accessToken };
+      return { accessToken };
+    } catch (error) {
+      throw new UnauthorizedException('Authentication failed. Please try again.');
+    }
   }
 
-  private async comparePassword(args: { password: string; hash: string }) {
-    return await bcrypt.compare(args.password, args.hash);
+  private async comparePassword(password: string, hash: string): Promise<boolean> {
+    return await bcrypt.compare(password, hash);
   }
 
-  private generateTokens(userData:User): {
-    accessToken: string;
-    refreshToken: string;
-  } {
+  private generateTokens(userData: User): { accessToken: string; refreshToken: string } {
     const accessToken = sign({ userData }, 'your-access-token-secret', {
       expiresIn: '5d',
     });
+
     const refreshToken = sign({ userData }, 'your-refresh-token-secret', {
       expiresIn: '60d',
     });
+
     return { accessToken, refreshToken };
   }
-
-
 }

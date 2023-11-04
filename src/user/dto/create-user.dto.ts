@@ -1,13 +1,5 @@
 import { IsEmail, IsString, IsEnum, IsNotEmpty, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserRole } from '../user.enum';
-
-// Define the Role enum with valid values
-enum Role {
-  READ = "READ",
-  WRITE = "WRITE",
-  ADMIN = "ADMIN",
-}
 
 // Create a Data Transfer Object (DTO) for creating a user
 export class CreateUserDto {
@@ -24,14 +16,6 @@ export class CreateUserDto {
   })
   @IsString()
   readonly name: string;
-
-  @ApiProperty({
-    example: Role.READ,
-    enum: Role,
-    description: 'The role of the user (READ, WRITE, or ADMIN)',
-  })
-  @IsEnum(UserRole)
-  readonly role?: UserRole;
 
   @ApiProperty({
     example: 'Password123', 
