@@ -1,12 +1,13 @@
 // userService.ts
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaService } from '../prisma.service'; 
+import { PrismaService } from '../prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { UserRole } from './user.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Injectable()
 export class UserService implements OnModuleInit {
@@ -31,16 +32,27 @@ export class UserService implements OnModuleInit {
     }
 
     async findAll() {
-        const result = await this.prismaService.user.findMany()        
+        const result = await this.prismaService.user.findMany()
         return result;
     }
 
     async findOne(userId: string): Promise<User | null> {
-        return this.prismaService.user.findUnique({
-            where: { id: userId },
-        });
+        try {
+            const user = await this.prismaService.user.findUnique({
+                where: { id: userId },
+            });
+            return user;
+        } catch (error) {
+            // Check if the error is related to the invalid ID format
+            if (error instanceof Prisma.PrismaClientKnownRequestError && error.message.includes("Malformed ObjectID")) {
+                return null; // Return null or another appropriate response for not found
+            } else {
+                // Handle other types of errors (e.g., database connection issues)
+                throw new Error("An error occurred while fetching the user.");
+            }
+        }
     }
-
+    
     async create(createUserDto: CreateUserDto): Promise<User> {
         const { password, ...userData } = createUserDto;
 
@@ -57,7 +69,7 @@ export class UserService implements OnModuleInit {
         return user;
     }
 
-    async updateUser(userId: string, updateUserDto: UpdateUserDto) {
+    async updateUser(userId: string, updateUserDto: UpdateUserDto): Promise<User> {
         const { oldPassword, newPassword, ...userData } = updateUserDto;
 
         // Check if both oldPassword and newPassword are provided
@@ -103,28 +115,45 @@ export class UserService implements OnModuleInit {
 
     async updatePassword(userId: string, updatePasswordDto: UpdatePasswordDto): Promise<void> {
         const { oldPassword, newPassword } = updatePasswordDto;
-    
+
         // Retrieve the user
         const user = await this.findOne(userId)
-    
+
         if (!user) {
-          throw new Error('User not found');
+            throw new Error('User not found');
         }
-    
+
         // Validate the old password
         const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
-    
+
         if (!isPasswordValid) {
-          throw new Error('Old password is incorrect');
+            throw new Error('Old password is incorrect');
         }
-    
+
         // Hash the new password
         const hashedPassword = await bcrypt.hash(newPassword, 10);
-    
+
         // Update the user's password with the new hashed password
         await this.prismaService.user.update({
-          where: { id: userId },
-          data: { password: hashedPassword },
+            where: { id: userId },
+            data: { password: hashedPassword },
+        });
+    }
+
+    async updateUserRole(userId: string, updateRoleDto: UpdateRoleDto): Promise<User> {
+        const { role } = updateRoleDto
+
+        // Retrieve the user
+        const user = await this.findOne(userId)
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        // Update the user's role with the new role
+        return await this.prismaService.user.update({
+            where: { id: userId },
+            data: { role },
         });
     }
 

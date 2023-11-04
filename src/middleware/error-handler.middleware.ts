@@ -1,32 +1,52 @@
-import { HttpException, HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
+import {
+  Injectable,
+  NestMiddleware,
+  HttpException,
+  HttpStatus,
+  ArgumentsHost,
+} from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { LoggerService } from 'src/shared/logger.service';
 
+
 @Injectable()
 export class ErrorHandlerMiddleware implements NestMiddleware {
-  constructor(private readonly logger: LoggerService) {} // Inject the logger service
+  constructor(private readonly logger: LoggerService) { }
+  async catch(exception: any, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse();
+    const request = ctx.getRequest();
+    const status =
+      exception instanceof HttpException
+        ? exception.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
 
-  use(req: Request, res: Response, next: NextFunction) {
-    try {
-      // Execute the next middleware
-      next();
-    } catch (error) {
-      const status =
-        error instanceof HttpException
-          ? error.getStatus()
-          : HttpStatus.INTERNAL_SERVER_ERROR;
+    let newExeption = exception;
 
-      const message = error.message || 'Internal Server Error';
-
-      // Log the error using the logger service
-      this.logger.error(message, error.stack);
-
-      res.status(status).json({
-        statusCode: status,
-        timestamp: new Date().toISOString(),
-        path: req.url,
-        message: message,
-      });
+    if (exception.message && exception.response) {
+      newExeption = exception.message;
     }
+    else if (exception && exception?.response?.data?.message) {
+      newExeption = exception?.response?.data?.message;
+    }
+    else if (exception && exception.message) {
+      newExeption = exception.message;
+    }
+
+    this.logger.error(
+      `route ${request.url} faild with status error ${status} because ${newExeption}`,
+    );
+
+
+    response.status(status).json({
+      statusCode: status,
+      message: newExeption,
+      route: request.url,
+      source: request.headers.source || "Postman"
+    });
+  }
+
+  async use(req: Request, res: Response, next: NextFunction) {
+    next();
   }
 }

@@ -7,6 +7,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
+import { UserRole } from './user.enum';
 
 
 describe('UserController', () => {
@@ -71,8 +73,45 @@ describe('UserController', () => {
     const result = await controller.updateUser(userId, updateUserDto);
     expect(result).toBe(updatedUser);
   });
-  
 
+  it('should update the user role', async () => {
+    // Arrange
+    const userId = '1';
+    const updateRoleDto: UpdateRoleDto = { role:UserRole.MEMBER }; // Specify the new role
+
+    const updatedUser: User = {
+      id: userId,
+      email: 'test@example.com',
+      name: 'Test User',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      role: UserRole.MEMBER, // Set the expected updated role
+      password: 'hashed_password',
+    };
+
+    // Mock the updateUserRole method in the userService to return the updatedUser
+    jest.spyOn(userService, 'updateUserRole').mockResolvedValue(updatedUser);
+
+    // Act
+    const result = await controller.updateUserRole(userId, updateRoleDto);
+
+    // Assert
+    expect(result).toEqual(updatedUser); // Ensure that the result matches the updatedUser
+  });
+
+  it('should handle a user not found', async () => {
+    // Arrange
+    const userId = 'nonexistent'; // Assume a non-existent user
+    const updateRoleDto: UpdateRoleDto = { role:UserRole.MEMBER };
+
+    // Mock the updateUserRole method to return null, indicating the user is not found
+    jest.spyOn(userService, 'updateUserRole').mockResolvedValue(null);
+
+    // Act and Assert
+    await expect(controller.updateUserRole(userId, updateRoleDto)).rejects.toThrowError('User not found');
+  });
+
+  
   it('should update a user password', async () => {
     const userId = '1';
     const updatePasswordDto: UpdatePasswordDto = {
