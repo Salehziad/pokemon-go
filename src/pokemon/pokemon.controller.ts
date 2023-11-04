@@ -6,8 +6,10 @@ import { pokemon } from '@prisma/client';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { AuthJwtGuard } from '../auth/guard/auth.guard';
 import { RoleGuard } from 'src/auth/guard/role.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('pokemon')
+@ApiBearerAuth()
 @UseGuards(AuthJwtGuard)
 export class PokemonController {
   constructor(private readonly pokemonService: PokemonService) { }

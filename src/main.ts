@@ -18,6 +18,7 @@ async function bootstrap() {
     .setDescription('API for managing Pokémon data')
     .setVersion('1.0')
     .addTag('Pokémon')
+    .addBearerAuth() // Add Bearer token authentication
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
