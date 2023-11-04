@@ -42,6 +42,7 @@ export class ErrorHandlerMiddleware implements NestMiddleware {
       statusCode: status,
       message: newExeption,
       route: request.url,
+      source: request.headers.source || "Postman"
     });
   }
 

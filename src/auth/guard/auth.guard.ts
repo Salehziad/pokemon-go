@@ -21,7 +21,6 @@ import {
         });
         
         request.user = decoded.userData; // Attach the decoded user to the request object
-        // console.log("ssss", request.user);
         return true;
       } catch (error) {
         if (error.name === 'TokenExpiredError') {

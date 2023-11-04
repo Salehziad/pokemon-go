@@ -44,7 +44,6 @@ export class UserController {
   }
 
   @Patch(':id/')
-  @UseGuards(new RoleGuard({ role: 'ADMIN' }))
   async updateUserRole(@Param('id') userId: string, @Body() updateRoleDto: UpdateRoleDto): Promise<User> {
     return await this.userService.updateUserRole(userId, updateRoleDto);
   }
