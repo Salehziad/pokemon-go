@@ -27,7 +27,7 @@ export class AuthService {
     return isPasswordValid ? user : null;
   }
 
-  async signin(signInDto: SignInDto, response): Promise<{ accessToken: string }> {
+  async signin(signInDto: SignInDto, request): Promise<{ accessToken: string }> {
     const { email, password } = signInDto;
     
     try {
@@ -41,10 +41,11 @@ export class AuthService {
 
       const { accessToken, refreshToken } = this.generateTokens(user);
       
-      response.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        path: '/',
-      });
+      request.res.setHeader(
+        'Set-Cookie',
+        `refreshToken=${refreshToken}; HttpOnly; Path=/;`,
+      );
+  
 
       return { accessToken };
     } catch (error) {
