@@ -1,9 +1,11 @@
 version: '3'
 
 services:
-  app:
+  pokemon-go:
+    container_name: pokemon-go   
     build:
-      context: .          # Path to your project directory
+      context: .                
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    restart: always            
