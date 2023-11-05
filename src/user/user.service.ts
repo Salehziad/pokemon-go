@@ -45,9 +45,8 @@ export class UserService implements OnModuleInit {
         } catch (error) {
             // Check if the error is related to the invalid ID format
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.message.includes("Malformed ObjectID")) {
-                return null; // Return null or another appropriate response for not found
+                return null;
             } else {
-                // Handle other types of errors (e.g., database connection issues)
                 throw new Error("An error occurred while fetching the user.");
             }
         }
@@ -143,14 +142,12 @@ export class UserService implements OnModuleInit {
     async updateUserRole(userId: string, updateRoleDto: UpdateRoleDto): Promise<User> {
         const { role } = updateRoleDto
 
-        // Retrieve the user
         const user = await this.findOne(userId)
 
         if (!user) {
             throw new Error('User not found');
         }
 
-        // Update the user's role with the new role
         return await this.prismaService.user.update({
             where: { id: userId },
             data: { role },

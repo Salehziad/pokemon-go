@@ -22,14 +22,14 @@ export class ErrorHandlerMiddleware implements NestMiddleware {
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
     let newExeption = exception;
-
-    if (exception.message && exception.response) {
-      newExeption = exception.message;
-    }
-    else if (exception && exception?.response?.data?.message) {
-      newExeption = exception?.response?.data?.message;
+    if (exception && exception?.response?.message) {
+      console.log(2);
+      
+      newExeption = exception?.response?.message;
     }
     else if (exception && exception.message) {
+      console.log(3);
+      
       newExeption = exception.message;
     }
 
@@ -42,7 +42,6 @@ export class ErrorHandlerMiddleware implements NestMiddleware {
       statusCode: status,
       message: newExeption,
       route: request.url,
-      source: request.headers.source || "Postman"
     });
   }
 
