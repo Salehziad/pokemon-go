@@ -43,7 +43,7 @@ export class UserController {
     return { message: 'Password updated successfully' };
   }
 
-  @Patch(':id/')
+  @Patch(':id/role')
   async updateUserRole(@Param('id') userId: string, @Body() updateRoleDto: UpdateRoleDto): Promise<User> {
     return await this.userService.updateUserRole(userId, updateRoleDto);
   }
